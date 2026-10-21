@@ -32,4 +32,11 @@
     --margin: 2rem;
     --radius: 0.5rem;
 
+    /* wanderghost custom map variables*/
+    --map-height-single: 250px;
+    --map-height-global: 100vh;
+    --map-border-radius: 8px;
+    --map-border-color: #e5e5e5;
+    --map-marker-size: 32px;
+
 }

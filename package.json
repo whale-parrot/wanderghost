@@ -1,8 +1,8 @@
 {
-    "name": "ghost-starter-theme",
-    "description": "A starter theme for Ghost theme development",
+    "name": "wanderghost",
+    "description": "A custom mobile-first travel theme for Ghost with auto-mapping",
     "demo": "https://starter.ghost.io",
-    "version": "1.0.0",
+    "version": "0.1.0",
     "engines": {
         "ghost": ">=5.0.0"
     },
@@ -21,28 +21,32 @@
     },
     "packageManager": "pnpm@12.14.0",
     "author": {
-        "name": "Ghost Foundation",
-        "email": "hello@ghost.org",
-        "url": "https://ghost.org"
+        "name": "Quirin",
+        "email": "your-email@example.com",
+        "url": "https://github.com/whale-parrot"
     },
     "gpm": {
         "type": "theme",
         "categories": [
             "Minimal",
-            "Magazine"
+            "Travel",
+            "Photography"
         ]
     },
     "keywords": [
         "ghost",
         "theme",
-        "ghost-theme"
+        "ghost-theme",
+        "travel",
+        "mobile-first",
+        "maps"
     ],
     "repository": {
         "type": "git",
-        "url": "https://github.com/TryGhost/Starter.git"
+        "url": "https://github.com/whale-parrot/wanderghost.git"
     },
-    "bugs": "https://github.com/TryGhost/Starter/issues",
-    "contributors": "https://github.com/TryGhost/Starter/graphs/contributors",
+    "bugs": "https://github.com/whale-parrot/wanderghost/issues",
+    "contributors": "https://github.com/whale-parrot/wanderghost/graphs/contributors",
     "devDependencies": {
         "@babel/core": "8.0.7",
         "@babel/preset-env": "8.0.7",
