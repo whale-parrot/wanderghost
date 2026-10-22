@@ -68,6 +68,11 @@
         </div>
 
         {{#if comments}}
+
+        {{!-- Auto-Post Map Container --}}
+        <div id="auto-post-map" data-post-id="{{id}}" style="display: none; height: var(--map-height-single); width: 100%; border-radius: var(--map-border-radius); overflow: hidden; margin-bottom: 2rem; border: 1px solid var(--map-border-color);">
+        </div>
+
         <section class="gh-post-comments">
             {{comments}}
         </section>
