@@ -97,7 +97,7 @@ hr {
 
 mark {
     background-color: var(--color-accent-ochre);
-    color: var(--color-text-inverse, #ffffff);
+    color: var(--color-text-inverse);
 }
 
 small {

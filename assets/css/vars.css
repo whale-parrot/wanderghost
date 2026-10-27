@@ -6,6 +6,7 @@
     --color-base: #353B32;
     --color-border: #D8D4CA;
     --color-bg: #F8F6F1;
+    --color-text-inverse: #FFFFFF;
     --color-success: #80b912;
     --color-error: #f05230;
 
@@ -51,6 +52,7 @@
     --color-base: #F3F0E8;
     --color-border: #465044;
     --color-bg: #202821;
+    --color-text-inverse: #202821;
     --color-success: #9fd356;   /* lighter green for dark bg */
     --color-error: #ff7a62;     /* softer red for dark bg */
     --color-surface: #30392F;
