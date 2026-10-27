@@ -362,7 +362,7 @@ body:not(.gh-head-open) .gh-burger:hover .gh-burger-inner::after {
 
 .theme-toggle-btn.active {
     background-color: var(--color-accent-green);
-    color: #ffffff;
+    color: var(--color-text-inverse);
 }
 
 .theme-toggle-btn svg {

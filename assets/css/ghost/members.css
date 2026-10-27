@@ -16,7 +16,8 @@
 .gh-auth-form p {
     margin: 10px 0 4vmin 0;
     font-size: 1.7rem;
-    color: rgba(0,0,0,0.6)
+    color: var(--color-text);
+    opacity: 0.6;
 }
 
 .gh-auth-form p small {
@@ -70,7 +71,7 @@ form[data-members-form] .message-error {
     width: 15px;
 }
 .message-success svg {
-    fill: #fff;
+    fill: var(--color-text-inverse);
 }
 .message-error svg {
     fill: var(--color-error);
@@ -86,7 +87,7 @@ form[data-members-form].error .message-error {
     max-width: calc(1400px - 8vmin);
     margin: 0 auto;
     padding: 10px 0;
-    color: #fff;
+    color: var(--color-text-inverse);
     font-size: 1.4rem;
     line-height: 1.5em;
     font-weight: 500;
@@ -99,7 +100,7 @@ form[data-members-form].success .message-success {
 }
 form[data-members-form].error .message-error {
     color: var(--color-error);
-    background: #fff;
+    background: var(--color-bg);
     box-shadow: var(--color-error) 0 0 0 1px;
 }
 
@@ -127,7 +128,7 @@ form[data-members-form].loading .gh-button-loader {
 
 .gh-button-loader svg path,
 .gh-button-loader svg rect{
-  fill: #fff;
+  fill: var(--color-text-inverse);
 }
 
 /*-- Show success message on success --*/
