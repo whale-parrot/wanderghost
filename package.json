@@ -2,7 +2,7 @@
     "name": "wanderghost",
     "description": "A custom mobile-first travel theme for Ghost with auto-mapping",
     "demo": "https://starter.ghost.io",
-    "version": "0.1.0",
+    "version": "1.0.0",
     "engines": {
         "ghost": ">=5.0.0"
     },

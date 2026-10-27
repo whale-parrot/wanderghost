@@ -35,7 +35,7 @@ html,
     display: flex;
     flex-direction: column;
     min-height: 100vh;
-    background: #ffffff;
+    background: var(--color-bg);
 }
 
 .gh-main {
@@ -247,7 +247,7 @@ html,
     margin: 0 1.25vmin 0 0;
     height: 1em;
     width: 1px;
-    background: rgba(0,0,0,0.3);
+    background: var(--color-border);
     transform: rotate(20deg);
 }
 

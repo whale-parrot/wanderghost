@@ -1,7 +1,24 @@
 <!DOCTYPE html>
 <html lang="{{@site.locale}}">
-<head>
 
+<script>
+    // Runs immediately to set theme before page paints
+    (function() {
+        const theme = localStorage.getItem('wanderghost-theme');
+        const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+        
+        if (theme === 'dark' || (theme === 'system' && prefersDark)) {
+            document.documentElement.setAttribute('data-theme', 'dark');
+        } else if (theme === 'light') {
+            document.documentElement.setAttribute('data-theme', 'light');
+        } else {
+            document.documentElement.setAttribute('data-theme', prefersDark ? 'dark' : 'light');
+            localStorage.setItem('wanderghost-theme', 'system');
+        }
+    })();
+</script>
+
+<head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="{{asset "built/index.css"}}" />
@@ -10,17 +27,19 @@
     <title>{{meta_title}}</title>
 
     {{ghost_head}}
-    {{!-- Outputs important meta data and settings, should always be in <head> --}}
-    <!-- Leaflet CSS -->
+    
+    <!-- Leaflet Core CSS (Official SRI hash from leafletjs.com) -->
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin=""/>
-
+    
+    <!-- MarkerCluster CSS (No hash to prevent silent CDN blocking) -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet.markercluster/1.5.3/MarkerCluster.min.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet.markercluster/1.5.3/MarkerCluster.Default.min.css" />
 </head>
 <body class="{{body_class}}">
 <div class="gh-viewport">
 
 <header id="gh-head" class="gh-head">
     <nav class="gh-head-inner gh-container">
-
         <div class="gh-head-brand">
             <a class="gh-head-logo" href="{{@site.url}}">
                 {{#if @site.logo}}
@@ -48,16 +67,26 @@
                     <a class="gh-button" href="#/portal/account">Account</a>
                     {{/if}}
                 {{/if}}
+                
+                <!-- Theme Toggle Buttons -->
+                <div class="theme-toggle" aria-label="Theme switcher">
+                    <button class="theme-toggle-btn" data-theme="light" title="Light mode">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line></svg>
+                    </button>
+                    <button class="theme-toggle-btn" data-theme="system" title="System preference">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="20" height="14" rx="2" ry="2"></rect><line x1="8" y1="21" x2="16" y2="21"></line><line x1="12" y1="17" x2="12" y2="21"></line></svg>
+                    </button>
+                    <button class="theme-toggle-btn" data-theme="dark" title="Dark mode">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>
+                    </button>
+                </div>
             </div>
         </div>
     </nav>
 </header>
 
 <main class="gh-main">
-
     {{{body}}}
-    {{!-- All content gets inserted here, index.hbs, post.hbs, etc --}}
-
 </main>
 
 <footer class="gh-foot">
@@ -73,14 +102,53 @@
 
 </div>
 
-{{!-- <foot> --}}
 {{ghost_foot}}
-{{!-- Outputs important scripts - should always be included before closing body tag --}}
 
-<!-- Leaflet JS -->
+<!-- Leaflet Core JS (Official SRI hash from leafletjs.com) -->
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
 
-<!-- Our Custom Map Loader -->
+<!-- MarkerCluster JS (No hash to prevent silent CDN blocking) -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet.markercluster/1.5.3/leaflet.markercluster.min.js"></script>
+
+<!-- Our Custom Map Loaders -->
 <script src="{{asset "js/map-loader.js"}}"></script>
+<script src="{{asset "js/global-map.js"}}"></script>
+
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const buttons = document.querySelectorAll('.theme-toggle-btn');
+        const currentTheme = localStorage.getItem('wanderghost-theme') || 'system';
+
+        // Set initial active state
+        buttons.forEach(btn => {
+            if (btn.dataset.theme === currentTheme) {
+                btn.classList.add('active');
+            }
+        });
+
+        // Handle clicks
+        buttons.forEach(btn => {
+            btn.addEventListener('click', () => {
+                const theme = btn.dataset.theme;
+                const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+                let actualTheme;
+
+                if (theme === 'system') {
+                    actualTheme = prefersDark ? 'dark' : 'light';
+                } else {
+                    actualTheme = theme;
+                }
+
+                document.documentElement.setAttribute('data-theme', actualTheme);
+                localStorage.setItem('wanderghost-theme', theme);
+
+                buttons.forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+            });
+        });
+    });
+</script>
+
+
 </body>
 </html>

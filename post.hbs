@@ -57,6 +57,13 @@
         {{/if}}
     </header>
 
+    {{!-- Auto-Post Map Container --}}
+    <div class="gh-canvas">
+        <div id="auto-post-map" data-post-id="{{id}}" style="display: none; height: var(--map-height-single); width: 100%; border-radius: var(--map-border-radius); overflow: hidden; margin-bottom: 2rem; border: 1px solid var(--map-border-color);">
+        </div>
+    </div>
+    
+
     <div class="gh-content gh-canvas">
         {{content}}
     </div>
@@ -69,9 +76,6 @@
 
         {{#if comments}}
 
-        {{!-- Auto-Post Map Container --}}
-        <div id="auto-post-map" data-post-id="{{id}}" style="display: none; height: var(--map-height-single); width: 100%; border-radius: var(--map-border-radius); overflow: hidden; margin-bottom: 2rem; border: 1px solid var(--map-border-color);">
-        </div>
 
         <section class="gh-post-comments">
             {{comments}}
@@ -94,5 +98,15 @@
         </div>
     </div>
 </aside>
+
+<style>
+    /* Hide raw map links in post content since we render the interactive map instead */
+    .gh-content a[href*="openstreetmap.org"],
+    .gh-content a[href*="maps.apple.com"],
+    .gh-content a[href*="maps.google.com"],
+    .gh-content a[href*="osmand.net"] {
+        display: none !important;
+    }
+</style>
 
 {{/post}}

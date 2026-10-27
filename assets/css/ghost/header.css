@@ -9,7 +9,8 @@
 }
 
 .gh-head a {
-    color: inherit;
+    background-color: var(--color-surface);
+    border-bottom: 1px solid var(--color-border);
     text-decoration: none;
 }
 
@@ -326,4 +327,45 @@ body:not(.gh-head-open) .gh-burger:hover .gh-burger-inner::after {
     #gh-head .gh-head-menu {
         font-size: 6vmin;
     }
+}
+
+
+/* =========================================
+   Theme Toggle
+   ========================================= */
+.theme-toggle {
+    display: flex;
+    gap: 0.25rem;
+    background-color: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius);
+    padding: 0.25rem;
+    margin-left: 1.5vmin;
+}
+
+.theme-toggle-btn {
+    background: transparent;
+    border: none;
+    color: var(--color-text);
+    cursor: pointer;
+    padding: 0.5rem;
+    border-radius: calc(var(--radius) - 2px);
+    transition: all 0.2s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.theme-toggle-btn:hover {
+    background-color: var(--color-border);
+}
+
+.theme-toggle-btn.active {
+    background-color: var(--color-accent-green);
+    color: #ffffff;
+}
+
+.theme-toggle-btn svg {
+    width: 18px;
+    height: 18px;
 }

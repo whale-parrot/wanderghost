@@ -126,25 +126,26 @@
 figcaption {
     padding: 1.5rem 1.5rem 0;
     text-align: center;
-    color: rgba(0,0,0,0.5);
+    color: var(--color-text);
+    opacity: 0.6; /* Replaces rgba(0,0,0,0.5) */
     font-weight: 600;
     font-size: 1.3rem;
     line-height: 1.4em;
 }
-
 figcaption strong {
-    color: rgba(0,0,0,0.8);
+    color: var(--color-text);
+    opacity: 0.9; /* Replaces rgba(0,0,0,0.8) */
 }
 
 .gh-canvas :not(pre) code {
     vertical-align: middle;
     padding: 0.15em 0.4em 0.15em;
-    border: #e1eaef 1px solid;
+    border: 1px solid var(--color-border);
     font-weight: 400 !important;
     font-size: 0.9em;
     line-height: 1em;
-    color: #dc0050;
-    background: #f0f6f9;
+    color: var(--color-error);
+    background: var(--color-surface);
     border-radius: 0.25em;
 }
 
@@ -215,20 +216,20 @@ figcaption strong {
 }
 
 .gh-content tbody tr:nth-child(2n + 1) {
-    background-color: rgba(0,0,0,0.1);
+    background-color: var(--color-surface);
     padding: 1px;
 }
 
 .gh-content tbody tr:nth-child(2n + 2) td:last-child {
     box-shadow:
-        inset 1px 0 rgba(0,0,0,0.1),
-        inset -1px 0 rgba(0,0,0,0.1);
+        inset 1px 0 var(--color-border),
+        inset -1px 0 var(--color-border);
 }
 
 .gh-content tbody tr:nth-child(2n + 2) td {
-    box-shadow: inset 1px 0 rgba(0,0,0,0.1);
+    box-shadow: inset 1px 0 var(--color-border);
 }
 
 .gh-content tbody tr:last-child {
-    border-bottom: 1px solid rgba(0,0,0,.1);
+    border-bottom: 1px solid var(--color-border);
 }
