@@ -35,11 +35,32 @@ document.addEventListener('DOMContentLoaded', async () => {
                 13 
             );
             
-            // Add the OpenStreetMap tile layer (the actual map images)
-            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-                attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
-                maxZoom: 19
+            // 1. Detect current theme
+            const currentTheme = document.documentElement.getAttribute('data-theme');
+            const isDark = currentTheme === 'dark';
+
+            
+            const mapboxToken = window.ghostMapboxToken
+
+            // 2. Set CARTO URLs (No API Key required!)
+            const lightUrl = `https://api.mapbox.com/styles/v1/mapbox/light-v10/tiles/{z}/{x}/{y}?access_token=${mapboxToken}`;
+            const darkUrl = `https://api.mapbox.com/styles/v1/mapbox/dark-v10/tiles/{z}/{x}/{y}?access_token=${mapboxToken}`;
+            const currentTileUrl = isDark ? darkUrl : lightUrl;
+
+            // 3. Add tiles and store in variable
+            let mapTileLayer = L.tileLayer(currentTileUrl, {
+                attribution: '&copy; <a href="https://www.mapbox.com/">Mapbox</a> &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
+                maxZoom: 19,
+                tileSize: 512,
+                zoomOffset: -1
             }).addTo(map);
+
+            // 4. Global function for theme toggle
+            window.updateWanderGhostPostMapTheme = function(theme) {
+                if (!postTileLayer) return;
+                const newUrl = theme === 'dark' ? darkUrl : lightUrl;
+                postTileLayer.setUrl(newUrl);
+            };
             
             // Add a marker at the exact coordinates
             L.marker([postData.location.lat, postData.location.lng])

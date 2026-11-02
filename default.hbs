@@ -34,6 +34,8 @@
     <!-- MarkerCluster CSS (No hash to prevent silent CDN blocking) -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet.markercluster/1.5.3/MarkerCluster.min.css" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet.markercluster/1.5.3/MarkerCluster.Default.min.css" />
+    <link rel="stylesheet" href="https://unpkg.com/@phosphor-icons/web@2.1.1/src/regular/style.css">
+    <link rel="stylesheet" href="https://unpkg.com/@phosphor-icons/web@2.1.1/src/fill/style.css">
 </head>
 <body class="{{body_class}}">
 <div class="gh-viewport">
@@ -62,7 +64,7 @@
                 {{search}}
                 {{#if @site.members_enabled}}
                     {{^if @member}}
-                    <a class="gh-button" href="{{@site.signup_url}}">Subscribe</a>
+                    <a class="gh-button" href="{{@site.signup_url}}">Subscribe here</a>
                     {{else}}
                     <a class="gh-button" href="#/portal/account">Account</a>
                     {{/if}}
@@ -71,13 +73,13 @@
                 <!-- Theme Toggle Buttons -->
                 <div class="theme-toggle" aria-label="Theme switcher">
                     <button class="theme-toggle-btn" data-theme="light" title="Light mode">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line></svg>
+                        <i class="ph-fill ph-sun"></i>
                     </button>
                     <button class="theme-toggle-btn" data-theme="system" title="System preference">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="20" height="14" rx="2" ry="2"></rect><line x1="8" y1="21" x2="16" y2="21"></line><line x1="12" y1="17" x2="12" y2="21"></line></svg>
+                        <i class="ph-fill ph-monitor"></i>
                     </button>
                     <button class="theme-toggle-btn" data-theme="dark" title="Dark mode">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>
+                        <i class="ph-fill ph-moon"></i>
                     </button>
                 </div>
             </div>
@@ -94,9 +96,9 @@
         <div class="gh-foot-menu">
             {{navigation type="secondary"}}
         </div>
-        <div class="gh-foot-meta">
+        <!--<div class="gh-foot-meta">
             Published with <a href="https://ghost.org" target="_blank" rel="noopener">Ghost</a>
-        </div>
+        </div>-->
     </div>
 </footer>
 
@@ -144,6 +146,13 @@
 
                 buttons.forEach(b => b.classList.remove('active'));
                 btn.classList.add('active');
+
+                if (typeof window.updateWanderGhostMapTheme === 'function') {
+                    window.updateWanderGhostMapTheme(actualTheme);
+                }
+                if (typeof window.updateWanderGhostPostMapTheme === 'function') {
+                    window.updateWanderGhostPostMapTheme(actualTheme);
+                }
             });
         });
     });

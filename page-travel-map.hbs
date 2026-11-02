@@ -6,7 +6,7 @@
 </main>
 
 <style>
-    /* 1. Target the main viewport wrapper and turn it into a vertical Flex container */
+    /* Target the main viewport wrapper and turn it into a vertical Flex container */
     body.page-travel-map .gh-viewport {
         display: flex !important;
         flex-direction: column !important;
@@ -14,23 +14,53 @@
         overflow: hidden !important; /* Prevents any scrolling */
     }
 
-    /* 2. Tell the header to only take up the space it naturally needs */
     body.page-travel-map .gh-head {
-        flex-shrink: 0 !important; 
+        position: fixed !important;
+        top: 12px !important;
+        left: 4vmin !important;
+        right: 4vmin !important;
+        width: auto !important;
+        z-index: 1000 !important; /* Ensures it floats ABOVE the map */
+        /* We intentionally leave out width/margin/radius overrides 
+            so it keeps the beautiful pill shape from header.css */
     }
 
-    /* 3. Tell the map wrapper to expand and fill ALL remaining vertical space */
+    /* Tell the map wrapper to expand and fill ALL remaining vertical space */
     body.page-travel-map .gh-main.global-map-wrapper {
-        flex: 1 !important; /* This is the magic: it takes up the rest of the space */
-        height: 100% !important;
-        padding: 0 !important;
-        margin: 0 !important;
-        max-width: 100% !important;
+        flex: 1;
+        height: 100%;
+        padding: 0;
+        margin: 0;
+        max-width: 100%;
+        position: relative;
     }
 
-    /* 4. Hide the footer to maximize map space */
+    /* Ensure the actual map div fills the wrapper completely */
+    #global-travel-map {
+        width: 100%;
+        height: 100%;
+        position: fixed;
+        top: 0;
+        left: 0;
+        z-index: 1;
+    }
+
+    /* Hide the footer to maximize map space */
     body.page-travel-map .gh-foot {
-        display: none !important; 
+        display: none;
+    }
+
+    .wanderghost-popup .leaflet-popup-content-wrapper,
+    .wanderghost-popup .leaflet-popup-tip {
+        background-color: var(--color-surface) !important;
+        color: var(--color-text) !important;
+        box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+    }
+
+    /* 2. Ensure the text inside the popup uses your theme colors */
+    .wanderghost-popup .leaflet-popup-content {
+        color: var(--color-text);
+        margin: 12px 16px; /* Slightly better padding */
     }
 
     /* 5. Custom styling for the map popups */
@@ -45,9 +75,52 @@
         margin: 0 0 4px 0;
         font-size: 16px;
     }
+
     .wanderghost-popup a {
         font-size: 14px;
         text-decoration: none;
         font-weight: bold;
+        color: var(--color-accent-lavender); /* Makes the link your brand green! */
+    }
+
+    .wanderghost-popup a:hover {
+        color: var(--color-accent-ochre); /* Changes to ochre on hover */
+    }
+
+    .leaflet-top.leaflet-right {
+        /* Push it down below the floating pill header */
+        top: 12vmin !important; 
+        
+        /* Align it with the left edge of your header pill */
+        right: 4vmin !important; 
+    }
+
+    /* Optional: Make the zoom buttons match your theme */
+    .leaflet-control-zoom a {
+        background-color: var(--color-surface) !important;
+        color: var(--color-text) !important;
+        border-color: var(--color-border) !important;
+        transition: all 0.2s ease;
+    }
+
+    .leaflet-control-zoom a:hover {
+        background-color: var(--color-accent-green) !important;
+        color: #ffffff !important;
+    }
+
+    /* ======================================================
+       ADD THE MOBILE MAP UI FIX HERE 
+       ====================================================== */
+    @media (max-width: 900px) {
+        .leaflet-top.leaflet-right {
+            /* 12px screen padding + 56px pill height + 16px safety clearance */
+            top: 84px !important; 
+            right: 12px !important; 
+        }
+        
+        .leaflet-top.leaflet-left {
+            top: 84px !important;
+            left: 12px !important;
+        }
     }
 </style>

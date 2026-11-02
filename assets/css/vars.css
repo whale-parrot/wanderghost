@@ -1,24 +1,67 @@
+/* =========================================
+   Local Variable Fonts
+   ========================================= */
+
+/* 1. EB Garamond (Serif) - Regular */
+@font-face {
+    font-family: 'EB Garamond';
+    src: url('../fonts/EBGaramond-VariableFont_wght.ttf') format('truetype');
+    font-weight: 400 800;
+    font-style: normal;
+    font-display: swap;
+}
+
+/* 2. EB Garamond (Serif) - Italic */
+@font-face {
+    font-family: 'EB Garamond';
+    src: url('../fonts/EBGaramond-Italic-VariableFont_wght.ttf') format('truetype');
+    font-weight: 400 800;
+    font-style: italic;
+    font-display: swap;
+}
+
+/* 3. DM Sans (Sans-Serif) - Regular */
+@font-face {
+    font-family: 'DM Sans';
+    src: url('../fonts/DMSans-VariableFont_opsz,wght.ttf') format('truetype');
+    font-weight: 100 1000;
+    font-style: normal;
+    font-display: swap;
+}
+
+/* 4. DM Sans (Sans-Serif) - Italic */
+@font-face {
+    font-family: 'DM Sans';
+    src: url('../fonts/DMSans-Italic-VariableFont_opsz,wght.ttf') format('truetype');
+    font-weight: 100 1000;
+    font-style: italic;
+    font-display: swap;
+}
+
+
+
 /* Variables
 /* ---------------------------------------------------------- */
 :root {
     /* Colours */
     --color-primary: var(--ghost-accent-color, #4E633D);
     --color-base: #353B32;
-    --color-border: #D8D4CA;
-    --color-bg: #F8F6F1;
+    --color-bg: #E8E0D4;
     --color-success: #80b912;
     --color-error: #f05230;
+    color-scheme: light;
 
     /* Travel blog palette */
-    --color-surface: #E8E0D4;
+    --color-surface: #F8F6F1;
+    --color-border: #D8D4CA;
     --color-text: #353B32;
     --color-accent-green: #4E633D;
-    --color-accent-lavender: #A7A0B9;
+    --color-accent-lavender: #A7A0B9; /*167, 160, 185*/
     --color-accent-ochre: #8A7137;
 
     /* Fonts */
-    --font-sans-serif: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen", "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue", sans-serif;
-    --font-serif: Georgia, Times, serif;
+    --font-sans-serif: 'DM Sans', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    --font-serif: 'EB Garamond', Georgia, serif;
     --font-mono: Menlo, Courier, monospace;
     --font-light: 100;
     --font-normal: 400;
@@ -35,7 +78,7 @@
     /* Sizes */
     --height: 4rem;
     --margin: 2rem;
-    --radius: 0.5rem;
+    --radius: 1rem;
 
     /* WanderGhost custom map variables */
     --map-height-single: 350px;
@@ -46,17 +89,38 @@
 }
 
 /* Dark mode */
-[data-theme="dark"] {
+/*!
+html[data-theme="dark"] {
     --color-primary: #B8B58B;
     --color-base: #F3F0E8;
     --color-border: #465044;
     --color-bg: #202821;
-    --color-success: #9fd356;   /* lighter green for dark bg */
-    --color-error: #ff7a62;     /* softer red for dark bg */
+    --color-success: #9fd356;   /* lighter green for dark bg *//*
+    --color-error: #ff7a62;     /* softer red for dark bg *//*
     --color-surface: #30392F;
     --color-text: #F3F0E8;
     --color-accent-green: #B8B58B;
-    --color-accent-lavender: #C4BBD8;
+    --color-accent-lavender: #C4BBD8; /*196, 187, 216*//*
     --color-accent-ochre: #D0B477;
     --map-border-color: #465044;
+    color-scheme: dark;
+}
+*/
+
+
+/* Dark mode - Purple Palette */
+html[data-theme="dark"] {
+    --color-primary: #C4BBD8;          /* Swapped to your accent lavender for branding */
+    --color-base: #F3F0E8;             /* Kept the same off-white base */
+    --color-border: #4D4450;           /* Deep dark purple-tinted gray border */
+    --color-bg: #252028;               /* Rich, deep dark purple background */
+    --color-success: #9fd356;          /* Unchanged (standard semantic color) */
+    --color-error: #ff7a62;            /* Unchanged (standard semantic color) */
+    --color-surface: #382F39;          /* Slightly lighter dark purple for cards/surfaces */
+    --color-text: #F3F0E8;             /* Kept high-contrast soft text */
+    --color-accent-green: #B8B58B;     /* Preserved original primary green as a secondary accent */
+    --color-accent-lavender: #C4BBD8;  /* #C4BBD8 */
+    --color-accent-ochre: #D0B477;     /* Kept warm contrast accent */
+    --map-border-color: #4D4450;       /* Updated to match your new purple-gray borders */
+    color-scheme: dark;
 }

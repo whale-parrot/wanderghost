@@ -2,16 +2,28 @@
 /* ---------------------------------------------------------- */
 
 .gh-head {
-    padding: 3vmin 4vmin;
+    position: sticky;
+    top: 2vmin;
+    z-index: 999;
+    margin: 0 auto;
+    padding: 0.3vmin 4vmin;
     font-size: 1.6rem;
     line-height: 1.3em;
-    background: inherit;
+    background-color: var(--color-surface);
+
+    border: 1px solid var(--color-border);
+    border-radius: 100px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.04); /* Subtle lift */
+    transition: all 0.3s ease;
+
+    max-width: 1200px;
+    width: calc(100% - 8vmin);
 }
 
 .gh-head a {
-    background-color: var(--color-surface);
-    border-bottom: 1px solid var(--color-border);
     text-decoration: none;
+    background: transparent;
+    border: none;
 }
 
 .gh-head-inner {
@@ -53,6 +65,9 @@
 .gh-head-menu {
     display: flex;
     align-items: center;
+    font-family: var(--font-serif);
+    font-size: 24px;
+    font-weight: 200;
 }
 
 .gh-head-menu .nav {
@@ -70,10 +85,16 @@
 .gh-head-menu .nav a {
     display: inline-block;
     padding: 5px 0;
+    /*transition: opacity 0.2s ease;*/
 }
 
 .gh-head-menu .nav-current a {
     box-shadow: 0 -1px 0 0 currentcolor inset;
+}
+
+.gh-head-menu .nav a:hover {
+    opacity: 1;
+    color: var(--color-accent-green);
 }
 
 
@@ -233,101 +254,250 @@ body:not(.gh-head-open) .gh-burger:hover .gh-burger-inner::after {
 }
 
 
-/* Mobile Menu
-/* ---------------------------------------------------------- */
-/* IDs needed to ensure sufficient specificity */
-
+/* =========================================
+   Mobile Menu (Floating Pill + Card Centered)
+   ========================================= */
 @media (max-width: 900px) {
-    .gh-burger {
-        display: inline-block;
+    
+    /* 1. The Floating Pill (Centered safely using left/right instead of transform) */
+    .gh-head {
+        position: fixed !important;
+        top: 12px;
+        
+        /* FIX: Replaced transform centering with matching viewport edges */
+        left: 4vmin !important;
+        right: 4vmin !important;
+        width: auto !important; 
+        max-width: 1200px;
+        height: 56px;
+        
+        background: var(--color-surface);
+        border: 1px solid var(--color-border);
+        border-radius: 100px;
+        z-index: 1002; /* Kept safely on top of the blur overlay */
+        padding: 0 16px;
+        box-sizing: border-box;
+        display: flex !important;
+        align-items: center;
     }
-    #gh-head {
-        transition: all 0.4s ease-out;
-        overflow: hidden;
-    }
-    #gh-head .gh-head-inner {
-        height: 100%;
-        grid-template-columns: 1fr;
-    }
-    #gh-head .gh-head-brand {
-        position: relative;
-        z-index: 10;
-        grid-column-start: auto;
-        max-width: none;
-        display: flex;
+
+    /* Keep the internal container layout clean and non-breaking */
+    .gh-head-inner {
+        display: flex !important;
         align-items: center;
         justify-content: space-between;
-        user-select: none;
+        width: 100%;
+        height: 100%;
+        grid-gap: 0;
     }
-    #gh-head .gh-head-logo {
-        font-size: 2.2rem;
+
+    /* Brand wrapper layout locked to the left side */
+    .gh-head-brand {
+        display: flex !important;
+        align-items: center;
+        justify-content: space-between;
+        width: 100%;
+        max-width: none;
     }
-    #gh-head .gh-head-logo img {
-        max-height: 40px;
+
+    .gh-head-logo {
+        font-size: 1.8rem;
+        font-weight: 700;
+        padding: 0;
     }
-    #gh-head .gh-head-menu {
-        align-self: center;
+
+    /* Burger/Close icon element stays on the far right */
+    .gh-burger {
+        display: flex !important;
+        background: transparent;
+        border: none;
+        cursor: pointer;
+        z-index: 1003;
+    }
+
+    /* Hide standard desktop presentation tracks by default when closed */
+    body:not(.gh-head-open) .gh-head-menu,
+    body:not(.gh-head-open) .gh-head-actions {
+        display: none !important;
+    }
+
+    /* --- 2. THE FLOATING MENU CARD (When Active) --- */
+    .gh-head-open .gh-head-menu {
+        position: fixed !important;
+        top: 80px; 
+        bottom: 12px;
+        height: calc(100vh - 92px);
+        
+        /* Matches the exact edge limits used on the header pill */
+        left: 4vmin !important;
+        right: 4vmin !important;
+        width: auto !important;
+        
+        background: var(--color-surface);
+        border: 1px solid var(--color-border);
+        border-radius: 28px;
+        box-shadow: 0 20px 40px rgba(0,0,0,0.08);
+        z-index: 1000; 
+        
+        display: flex !important;
+        flex-direction: column;
+        align-items: center;
+        padding: 32px 20px 160px 20px; /* Padding ensures scrolled links don't go behind buttons */
+        box-sizing: border-box;
+        overflow-y: auto;
+    }
+    
+    .gh-head-open .gh-head-menu .nav {
         display: flex;
         flex-direction: column;
         align-items: center;
+        width: 100%;
+        padding: 0;
+    }
+
+    .gh-head-open .gh-head-menu .nav li {
+        margin: 0;
+        width: 100%;
         text-align: center;
-        margin: 0 0 10vh 0;
-        font-weight: 300;
-        font-size: 3.6rem;
-        line-height: 1.1em;
     }
-    #gh-head .gh-head-menu .nav li {
-        margin: 5px 0;
+
+    .gh-head-open .gh-head-menu .nav a {
+        font-size: 2.2rem;
+        font-weight: 400;
+        font-family: var(--font-sans, sans-serif);
+        display: block;
+        padding: 12px 0;
+        color: var(--color-text);
     }
-    #gh-head .gh-head-menu .nav a {
-        padding: 8px 0;
-    }
-    #gh-head .gh-head-menu .nav {
-        display: flex;
+
+    /* --- 3. ACTIONS PANEL OVERLAY (FIXED AT THE VIEWPORT BOTTOM) --- */
+    /* Because .gh-head no longer uses a transform, this position: fixed container 
+       can now successfully target the true bottom edge of your screen. */
+    .gh-head-open .gh-head-actions {
+        display: flex !important;
+        position: fixed !important;
+        bottom: 28px; 
+        
+        /* Centers it inside the card using matching layout paddings */
+        left: calc(4vmin + 20px) !important;
+        right: calc(4vmin + 20px) !important;
+        width: auto !important;
+        z-index: 1001; 
+        
         flex-direction: column;
         align-items: center;
+        gap: 10px;
     }
-    #gh-head .gh-head-actions {
-        padding: 20px 0;
+
+    .gh-head-open .gh-head-actions-list {
+        display: flex !important;
+        flex-direction: column;
+        width: 100%;
+        gap: 10px;
+    }
+
+    /* Native Ghost search element formatting harness */
+    .gh-head-open .gh-head-actions-list button.gh-search,
+    .gh-head-open .gh-head-actions-list .gh-search-btn {
+        width: 100% !important;
+        max-width: none !important;
+        min-height: 48px;
+        display: flex !important;
         justify-content: center;
-        text-align: left;
+        align-items: center;
+        padding: 12px;
+        border-radius: 100px;
+        font-size: 1.6rem;
+        font-weight: 500;
+        background-color: var(--color-bg, #f3f3f3); 
+        color: var(--color-text, #000);
+        border: 1px solid var(--color-border);
+        cursor: pointer;
     }
-    #gh-head .gh-head-actions a {
-        margin: 0 10px;
+
+    /* Full width subscribe button look */
+    .gh-head-open .gh-head-actions a.gh-button {
+        width: 100% !important;
+        max-width: none !important;
+        min-height: 48px;
+        display: flex !important;
+        justify-content: center;
+        align-items: center;
+        padding: 12px;
+        border-radius: 100px;
+        margin: 0 !important;
+        font-size: 1.6rem;
+        font-weight: 500;
+        text-decoration: none;
+        box-sizing: border-box;
+        
+        background-color: var(--color-text, #000);
+        color: var(--color-surface, #fff);
+        border: none;
     }
-    /* Hide collapsed content */
-    #gh-head .gh-head-actions,
-    #gh-head .gh-head-menu {
-        display: none;
+
+    /* Secondary links treatment */
+    .gh-head-open .gh-head-actions a:not(.gh-button) {
+        background-color: var(--color-bg, #f3f3f3); 
+        color: var(--color-text, #000);
+        border: 1px solid var(--color-border);
     }
-    /* Open the menu */
-    .gh-head-open {
-        overflow: hidden;
-        height: 100vh;
-    }
-    .gh-head-open #gh-head {
+
+    /* Remove theme switchers from the mobile button pile */
+    /*.gh-head-open .gh-head-actions-list .theme-toggle {
+        display: none !important;
+    }*/
+
+    /* --- 4. BACKDROP BLUR & SCREEN SCROLL FREEZE --- */
+    body.gh-head-open::before {
+        content: '';
         position: fixed;
         top: 0;
-        right: 0;
-        bottom: 0;
         left: 0;
-        z-index: 900;
-        overflow-y: scroll;
+        width: 100vw;
+        height: 100vh;
+        background: rgba(0, 0, 0, 0.25);
+        backdrop-filter: blur(8px);
+        -webkit-backdrop-filter: blur(8px);
+        z-index: 999; 
+        pointer-events: none;
     }
-    .gh-head-open #gh-head .gh-head-inner {
-        grid-template-rows: auto 1fr auto;
+
+    /* Freezes background body scrolling automatically when menu class is on */
+    body.gh-head-open {
+        overflow: hidden !important;
     }
-    .gh-head-open #gh-head .gh-head-actions,
-    .gh-head-open #gh-head .gh-head-menu {
-        display: flex;
+
+    /* --- 4. MOBILE THEME TOGGLE REPOSITIONING --- */
+    /* Unhides and positions the switch wrapper smoothly inside the actions stack */
+    .gh-head-open .gh-head-actions-list .theme-toggle {
+        display: flex !important;
+        align-self: center;
+        width: 100%;
+        max-width: 240px; /* Gives it a balanced, compact size below the buttons */
+        margin: 10px auto 0 auto !important; /* Spaces it away from the subscribe button */
+        justify-content: space-around;
+        padding: 6px;
+        background-color: var(--color-bg, #f3f3f3);
+        border: 1px solid var(--color-border);
+        box-sizing: border-box;
     }
 }
 
-@media (max-width: 600px) {
-    #gh-head .gh-head-menu {
-        font-size: 6vmin;
+
+/* =========================================
+   Content Spacing (Prevents content hiding behind pill)
+   ========================================= */
+
+
+/* For Mobile Views */
+@media (max-width: 900px) {
+    .gh-main {
+        /* Pill Height (56px) + Top Screen Margin (12px) + Content Clearance Gap (24px) */
+        padding-top: 60px !important; 
     }
 }
+
 
 
 /* =========================================
@@ -338,15 +508,15 @@ body:not(.gh-head-open) .gh-burger:hover .gh-burger-inner::after {
     gap: 0.25rem;
     background-color: var(--color-surface);
     border: 1px solid var(--color-border);
-    border-radius: var(--radius);
+    border-radius: 100px;
     padding: 0.25rem;
     margin-left: 1.5vmin;
 }
 
 .theme-toggle-btn {
     background: transparent;
-    border: none;
     color: var(--color-text);
+    border: none;
     cursor: pointer;
     padding: 0.5rem;
     border-radius: calc(var(--radius) - 2px);
@@ -357,15 +527,24 @@ body:not(.gh-head-open) .gh-burger:hover .gh-burger-inner::after {
 }
 
 .theme-toggle-btn:hover {
-    background-color: var(--color-border);
+    background-color: var(--color-bg);
+    color: var(--color-text);
+    border-radius: 100px;
 }
 
 .theme-toggle-btn.active {
-    background-color: var(--color-accent-green);
-    color: #ffffff;
+    background-color: var(--color-accent-lavender);
+    color: var(--color-text);
+    border-radius: 100px;
 }
 
-.theme-toggle-btn svg {
+
+.theme-toggle-btn svg,
+.theme-toggle-btn i {
     width: 18px;
     height: 18px;
+    color: inherit;
+    stroke: currentColor; 
+    fill: none;
+    stroke-width: 2;
 }

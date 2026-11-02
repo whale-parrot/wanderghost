@@ -17,13 +17,42 @@ document.addEventListener('DOMContentLoaded', async () => {
         // 2. Initialize the Leaflet map
         // We start at [20, 0] (middle of the world) and zoom level 2. 
         // We will auto-zoom later once we know where the markers are.
-        const map = L.map('global-travel-map').setView([20, 0], 2);
-        
-        // Add the standard OpenStreetMap tiles
-        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-            attribution: '&copy; OpenStreetMap contributors',
-            maxZoom: 19
+        const map = L.map('global-travel-map', {
+            zoomControl: false
+        });
+
+        L.control.zoom({
+            position: 'topright'
         }).addTo(map);
+        
+        // 1. Detect current theme
+        const currentTheme = document.documentElement.getAttribute('data-theme');
+        const isDark = currentTheme === 'dark';
+
+        
+        const mapboxToken = window.ghostMapboxToken
+
+
+        // 2. Set CARTO URLs
+        const lightUrl = `https://api.mapbox.com/styles/v1/mapbox/light-v10/tiles/{z}/{x}/{y}?access_token=${mapboxToken}`;
+        const darkUrl = `https://api.mapbox.com/styles/v1/mapbox/dark-v10/tiles/{z}/{x}/{y}?access_token=${mapboxToken}`;
+        const currentTileUrl = isDark ? darkUrl : lightUrl;
+
+
+        // 3. Add tiles to map and store in a variable
+        let mapTileLayer = L.tileLayer(currentTileUrl, {
+            attribution: '&copy; <a href="https://www.mapbox.com/">Mapbox</a> &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
+            maxZoom: 19,
+            tileSize: 512,
+            zoomOffset: -1
+        }).addTo(map);
+
+        // 4. Create a global function to update tiles when theme changes
+        window.updateWanderGhostMapTheme = function(theme) {
+            if (!mapTileLayer) return;
+            const newUrl = theme === 'dark' ? darkUrl : lightUrl;
+            mapTileLayer.setUrl(newUrl);
+        };
 
         // 3. Initialize the MarkerCluster Group (Task 5.7)
         // This automatically groups markers that are close together when zoomed out
@@ -33,10 +62,17 @@ document.addEventListener('DOMContentLoaded', async () => {
             showCoverageOnHover: false,
         });
 
+        const wanderghostIcon = L.divIcon({
+            className: 'wanderghost-custom-marker',
+            html: `<i class="ph-fill ph-map-pin"></i>`,
+            iconAnchor: [24, 48], // The "tip" of the marker
+            popupAnchor: [0, -48] // Where the popup opens
+        });
+
         // 4. Loop through all locations and create markers (Tasks 5.4 & 5.5)
         locations.forEach(loc => {
             // Create a standard Leaflet marker
-            const marker = L.marker([loc.location.lat, loc.location.lng]);
+            const marker = L.marker([loc.location.lat, loc.location.lng], { icon: wanderghostIcon });
             
             // Build the custom popup HTML (Task 5.5)
             let popupContent = `<div class="wanderghost-popup">`;
@@ -54,7 +90,9 @@ document.addEventListener('DOMContentLoaded', async () => {
             </div>`;
             
             // Bind the popup to the marker
-            marker.bindPopup(popupContent, { maxWidth: 250 });
+            marker.bindPopup(`<div class="wanderghost-popup">${popupContent}</div>`, {
+                className: 'wanderghost-popup'
+            });
             
             // Add the marker to the cluster group
             markers.addLayer(marker);

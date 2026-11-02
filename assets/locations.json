@@ -1,9 +1,35 @@
 [
   {
+    "postId": "6ae4b59a1f4bcdfa85a94805",
+    "postTitle": "hallo limes",
+    "postUrl": "http://localhost:2368/hallo-limes/",
+    "featureImage": "https://images.unsplash.com/photo-1543852786-1cf6624b9987?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3wxMTc3M3wwfDF8c2VhcmNofDEyfHxrYXR6ZXxlbnwwfHx8fDE3OTMzNzM2MTB8MA&ixlib=rb-4.1.0&q=80&w=2000",
+    "publishedAt": "2026-10-30T15:20:23.000+00:00",
+    "location": {
+      "lat": 47.3744489,
+      "lng": 8.5410422,
+      "label": "switzerland, zuerich",
+      "source": "tag_geocode"
+    }
+  },
+  {
+    "postId": "6adca2748f0d3b63a197a2a2",
+    "postTitle": "Test 4 photo",
+    "postUrl": "http://localhost:2368/test-4-photo/",
+    "featureImage": "https://images.unsplash.com/photo-1790274742526-7352f211a403?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3wxMTc3M3wxfDF8YWxsfDF8fHx8fHx8fDE3OTMzNjA0Mjl8&ixlib=rb-4.1.0&q=80&w=2000",
+    "publishedAt": "2026-10-24T12:20:43.000+00:00",
+    "location": {
+      "lat": 52.5173885,
+      "lng": 13.3951309,
+      "label": "Germany, Berlin",
+      "source": "tag_geocode"
+    }
+  },
+  {
     "postId": "6adca02b8f0d3b63a197a28f",
     "postTitle": "Test 2 tag",
-    "postUrl": "http://192.168.1.244:2368/test-2-tag/",
-    "featureImage": null,
+    "postUrl": "http://localhost:2368/test-2-tag/",
+    "featureImage": "https://images.unsplash.com/photo-1793270141790-42848ad8ce34?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3wxMTc3M3wwfDF8YWxsfDEwfHx8fHx8fHwxNzkzMzYwNDI5fA&ixlib=rb-4.1.0&q=80&w=2000",
     "publishedAt": "2026-10-24T12:10:30.000+00:00",
     "location": {
       "lat": 35.6768601,
@@ -15,8 +41,8 @@
   {
     "postId": "6ad8fbd0ada3cc92bb55a9b2",
     "postTitle": "fake tag",
-    "postUrl": "http://192.168.1.244:2368/fake-tag/",
-    "featureImage": null,
+    "postUrl": "http://localhost:2368/fake-tag/",
+    "featureImage": "https://images.unsplash.com/photo-1780885115303-e06c98613e65?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3wxMTc3M3wwfDF8YWxsfDI3fHx8fHx8fHwxNzkzMzYwNDI5fA&ixlib=rb-4.1.0&q=80&w=2000",
     "publishedAt": "2026-10-21T17:52:32.000+00:00",
     "location": {
       "lat": 40.7128,
@@ -28,7 +54,7 @@
   {
     "postId": "6ad8ed2aada3cc92bb55a9a7",
     "postTitle": "test 4",
-    "postUrl": "http://192.168.1.244:2368/test-4/",
+    "postUrl": "http://localhost:2368/test-4/",
     "featureImage": "https://images.unsplash.com/photo-1792311491180-8ef9f0c78984?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3wxMTc3M3wwfDF8YWxsfDJ8fHx8fHx8fDE3OTI4MzAxNjN8&ixlib=rb-4.1.0&q=80&w=2000",
     "publishedAt": "2026-10-21T16:49:57.000+00:00",
     "location": {
@@ -41,7 +67,7 @@
   {
     "postId": "6ad8e7d8ada3cc92bb55a993",
     "postTitle": "test 3 london",
-    "postUrl": "http://192.168.1.244:2368/test-3-london/",
+    "postUrl": "http://localhost:2368/test-3-london/",
     "featureImage": "https://images.unsplash.com/photo-1789758612877-fa37f9689a20?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3wxMTc3M3wxfDF8YWxsfDE1fHx8fHx8fHwxNzkyODMwMTYzfA&ixlib=rb-4.1.0&q=80&w=2000",
     "publishedAt": "2026-10-21T16:27:09.000+00:00",
     "location": {
@@ -54,7 +80,7 @@
   {
     "postId": "6ad8e011ada3cc92bb55a982",
     "postTitle": "test 2, map link",
-    "postUrl": "http://192.168.1.244:2368/test-2-map-link/",
+    "postUrl": "http://localhost:2368/test-2-map-link/",
     "featureImage": null,
     "publishedAt": "2026-10-21T15:54:41.000+00:00",
     "location": {
@@ -67,7 +93,7 @@
   {
     "postId": "6ad8d37eada3cc92bb55a96b",
     "postTitle": "test 1",
-    "postUrl": "http://192.168.1.244:2368/test-1/",
+    "postUrl": "http://localhost:2368/test-1/",
     "featureImage": null,
     "publishedAt": "2026-10-21T15:00:23.000+00:00",
     "location": {
