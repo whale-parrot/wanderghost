@@ -1,3 +1,99 @@
+/* ========================================= */
+/*  Ghost Comments Layout & Spacing          */
+/* ========================================= */
+
+
+/* ========================================= */
+/*  Force Comments Visibility                */
+/* ========================================= */
+
 .gh-post-comments {
-    margin-block: 8vmin 4vmin;
+    display: block;
+    min-height: 200px;
+    margin-top: 8vmin;
+    padding-top: 4vmin;
+    border-top: 1px solid var(--color-border);
+    color: var(--color-text);
 }
+
+.gh-post-comments iframe {
+    display: block !important;
+    visibility: visible !important;
+    width: 100% !important;
+    /*min-height: 300px !important;*/ /* Forces the iframe to have height */
+    background: transparent !important;
+    border: none !important;
+}
+
+
+/* Style the internal elements (fallback in case iframe variables lag) */
+/*.gh-comments {                        */
+/*    margin-top: 6vmin;                */
+/*}                                     */
+/*                                      */
+/*.gh-comment {                         */
+/*    display: flex;                    */
+/*    gap: 1.5rem;                      */
+/*    margin-bottom: 2.5rem;            */
+/*}                                     */
+/*                                      */
+/*.gh-comment-avatar {                  */
+/*    width: 48px;                      */
+/*    height: 48px;                     */
+/*    border-radius: 50%;               */
+/*    object-fit: cover;                */
+/*    flex-shrink: 0;                   */
+/*}                                     */
+/*                                      */
+/*.gh-comment-body {                    */
+/*    flex: 1;                          */
+/*}                                     */
+/*                                      */
+/*.gh-comment-header {                  */
+/*    display: flex;                    */
+/*    align-items: baseline;            */
+/*    gap: 0.5rem;                      */
+/*    margin-bottom: 0.5rem;            */
+/*}                                     */
+/*                                      */
+/*.gh-comment-author {                  */
+/*    font-weight: 700;                 */
+/*    font-size: 1.5rem;                */
+/*    color: var(--color-text);         */
+/*}                                     */
+/*                                      */
+/*.gh-comment-time {                    */
+/*    font-size: 1.3rem;                */
+/*    color: var(--color-text);         */
+/*    opacity: 0.5;                     */
+/*}                                     */
+/*                                      */
+/*.gh-comment-content {                 */
+/*    font-size: 1.5rem;                */
+/*    line-height: 1.6;                 */
+/*    color: var(--color-text);         */
+/*}                                     */
+/*                                      */
+/* The form to write a new comment */     
+/*.gh-comment-form {                    */
+/*    margin-top: 4vmin;                */
+/*    display: flex;                    */
+/*    gap: 1rem;                        */
+/*}                                     */
+/*                                      */
+/*.gh-comment-form textarea {                       */
+/*    flex: 1;                                      */
+/*    padding: 1rem;                                */
+/*    border: 1px solid var(--color-border);        */
+/*    border-radius: 8px;                           */
+/*    background: var(--color-surface);             */
+/*    color: var(--color-text);                     */
+/*    font-family: var(--font-sans-serif);          */
+/*    resize: vertical;                             */
+/*    transition: border-color 0.2s ease;           */
+/*}                                                 */
+/*                                                  */
+/*.gh-comment-form textarea:focus {                 */
+/*    outline: none;                                */
+/*    border-color: var(--color-accent-green);      */
+/*}                                                 */

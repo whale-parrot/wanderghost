@@ -1,6 +1,6 @@
-/* =========================================
-   Local Variable Fonts
-   ========================================= */
+/* ========================================= */
+/* Local Variable Fonts                      */
+/* ========================================= */
 
 /* 1. EB Garamond (Serif) - Regular */
 @font-face {
@@ -38,10 +38,9 @@
     font-display: swap;
 }
 
-
-
-/* Variables
-/* ---------------------------------------------------------- */
+/* ========================================= */
+/* Variables                                 */
+/* ========================================= */
 :root {
     /* Colours */
     --color-primary: var(--ghost-accent-color, #4E633D);
@@ -56,7 +55,7 @@
     --color-border: #D8D4CA;
     --color-text: #353B32;
     --color-accent-green: #4E633D;
-    --color-accent-lavender: #A7A0B9; /*167, 160, 185*/
+    --color-accent-lavender: #A7A0B9;
     --color-accent-ochre: #8A7137;
 
     /* Fonts */
@@ -86,41 +85,35 @@
     --map-border-radius: 8px;
     --map-border-color: #D8D4CA;
     --map-marker-size: 32px;
+
+    /* Force Ghost Comments UI Colors (Light Mode) */
+    --ghost-accent-color: var(--color-accent-green);
+    /*--background-color: var(--color-bg);*/
+    /*--text-color: var(--color-text);*/
+    /*--border-color: var(--color-border);*/
 }
 
-/* Dark mode */
-/*!
+/* ========================================= */
+/* Dark mode - Purple Palette                */
+/* ========================================= */
 html[data-theme="dark"] {
-    --color-primary: #B8B58B;
+    --color-primary: #C4BBD8;
     --color-base: #F3F0E8;
-    --color-border: #465044;
-    --color-bg: #202821;
-    --color-success: #9fd356;   /* lighter green for dark bg *//*
-    --color-error: #ff7a62;     /* softer red for dark bg *//*
-    --color-surface: #30392F;
+    --color-border: #4D4450;
+    --color-bg: #252028;
+    --color-success: #9fd356;
+    --color-error: #ff7a62;
+    --color-surface: #382F39;
     --color-text: #F3F0E8;
     --color-accent-green: #B8B58B;
-    --color-accent-lavender: #C4BBD8; /*196, 187, 216*//*
+    --color-accent-lavender: #C4BBD8;
     --color-accent-ochre: #D0B477;
-    --map-border-color: #465044;
+    --map-border-color: #4D4450;
     color-scheme: dark;
-}
-*/
 
-
-/* Dark mode - Purple Palette */
-html[data-theme="dark"] {
-    --color-primary: #C4BBD8;          /* Swapped to your accent lavender for branding */
-    --color-base: #F3F0E8;             /* Kept the same off-white base */
-    --color-border: #4D4450;           /* Deep dark purple-tinted gray border */
-    --color-bg: #252028;               /* Rich, deep dark purple background */
-    --color-success: #9fd356;          /* Unchanged (standard semantic color) */
-    --color-error: #ff7a62;            /* Unchanged (standard semantic color) */
-    --color-surface: #382F39;          /* Slightly lighter dark purple for cards/surfaces */
-    --color-text: #F3F0E8;             /* Kept high-contrast soft text */
-    --color-accent-green: #B8B58B;     /* Preserved original primary green as a secondary accent */
-    --color-accent-lavender: #C4BBD8;  /* #C4BBD8 */
-    --color-accent-ochre: #D0B477;     /* Kept warm contrast accent */
-    --map-border-color: #4D4450;       /* Updated to match your new purple-gray borders */
-    color-scheme: dark;
+    /* Force Ghost Comments UI Colors (Dark Mode) */
+    --ghost-accent-color: var(--color-accent-green);
+    /*--background-color: var(--color-bg);*/
+    /*--text-color: var(--color-text);*/
+    /*--border-color: var(--color-border);*/
 }

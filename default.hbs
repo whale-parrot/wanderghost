@@ -1,26 +1,26 @@
 <!DOCTYPE html>
 <html lang="{{@site.locale}}">
-
-<script>
-    // Runs immediately to set theme before page paints
-    (function() {
-        const theme = localStorage.getItem('wanderghost-theme');
-        const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-        
-        if (theme === 'dark' || (theme === 'system' && prefersDark)) {
-            document.documentElement.setAttribute('data-theme', 'dark');
-        } else if (theme === 'light') {
-            document.documentElement.setAttribute('data-theme', 'light');
-        } else {
-            document.documentElement.setAttribute('data-theme', prefersDark ? 'dark' : 'light');
-            localStorage.setItem('wanderghost-theme', 'system');
-        }
-    })();
-</script>
-
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <script>
+        // Runs immediately to set theme before page paints
+        (function() {
+            const theme = localStorage.getItem('wanderghost-theme');
+            const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+
+            if (theme === 'dark' || (theme === 'system' && prefersDark)) {
+                document.documentElement.setAttribute('data-theme', 'dark');
+            } else if (theme === 'light') {
+                document.documentElement.setAttribute('data-theme', 'light');
+            } else {
+                document.documentElement.setAttribute('data-theme', prefersDark ? 'dark' : 'light');
+                localStorage.setItem('wanderghost-theme', 'system');
+            }
+        })();
+    </script>
+
     <link rel="stylesheet" href="{{asset "built/index.css"}}" />
     <script src="{{asset "built/index.js"}}" defer></script>
 
@@ -117,9 +117,95 @@
 <script src="{{asset "js/global-map.js"}}"></script>
 
 <script>
+    // comments-ui reads the color scheme once at mount and only re-checks it
+    // when the parent of #ghost-comments-root changes class or style.
+    // Toggling data-theme on <html> alone is invisible to it, so change this
+    // class whenever the theme changes.
+    function syncCommentsColorScheme(actualTheme) {
+        document.querySelectorAll('.gh-post-comments').forEach((el) => {
+            el.classList.toggle('gh-comments-dark', actualTheme === 'dark');
+
+            // comments-ui renders inside a same-origin srcdoc iframe. Its
+            // document has a white canvas by default, which hides the page
+            // background and makes dark-mode (white) text invisible. Make the
+            // iframe document transparent and match its color-scheme.
+            el.querySelectorAll('iframe').forEach((frame) => {
+                styleCommentsFrame(frame, actualTheme);
+            });
+        });
+    }
+
+    function styleCommentsFrame(frame, actualTheme) {
+        try {
+            const doc = frame.contentDocument;
+            if (!doc) return;
+            doc.documentElement.style.backgroundColor = 'transparent';
+            doc.documentElement.style.colorScheme = actualTheme;
+            if (doc.body) {
+                doc.body.style.backgroundColor = 'transparent';
+            }
+
+            // comments-ui's CTA and links use fixed black colors, which
+            // disappear on a dark page. Match them to the theme in dark mode.
+            let style = doc.getElementById('wanderghost-comments-theme');
+            if (!style) {
+                style = doc.createElement('style');
+                style.id = 'wanderghost-comments-theme';
+                (doc.head || doc.documentElement).appendChild(style);
+            }
+
+            if (actualTheme === 'dark') {
+                const accent = getComputedStyle(document.documentElement)
+                    .getPropertyValue('--color-primary').trim() || '#C4BBD8';
+                const text = getComputedStyle(document.body).color;
+                style.textContent = `
+                    .ghost-display { --gh-accent-color: ${accent} !important; }
+                    .ghost-display.dark button { color: ${text} !important; }
+                `;
+            } else {
+                style.textContent = '';
+            }
+        } catch (e) {
+            // Cross-origin comments iframe; nothing we can style from here.
+        }
+    }
+
+    // comments-ui creates its iframe after DOMContentLoaded, so watch for it.
+    function watchCommentsFrames() {
+        document.querySelectorAll('.gh-post-comments').forEach((section) => {
+            const apply = () => syncCommentsColorScheme(
+                document.documentElement.getAttribute('data-theme')
+            );
+
+            section.querySelectorAll('iframe').forEach((frame) => {
+                frame.addEventListener('load', apply);
+            });
+            apply();
+
+            new MutationObserver((mutations) => {
+                mutations.forEach((mutation) => {
+                    mutation.addedNodes.forEach((node) => {
+                        if (node.nodeType !== 1) return;
+                        if (node.tagName === 'IFRAME') {
+                            node.addEventListener('load', apply);
+                        } else if (node.querySelectorAll) {
+                            node.querySelectorAll('iframe').forEach((frame) => {
+                                frame.addEventListener('load', apply);
+                            });
+                        }
+                    });
+                });
+                apply();
+            }).observe(section, { childList: true, subtree: true });
+        });
+    }
+
     document.addEventListener('DOMContentLoaded', () => {
         const buttons = document.querySelectorAll('.theme-toggle-btn');
         const currentTheme = localStorage.getItem('wanderghost-theme') || 'system';
+
+        // Keep comments in sync on first load as well
+        watchCommentsFrames();
 
         // Set initial active state
         buttons.forEach(btn => {
@@ -146,6 +232,9 @@
 
                 buttons.forEach(b => b.classList.remove('active'));
                 btn.classList.add('active');
+
+                // Make comments-ui re-evaluate its light/dark mode first
+                syncCommentsColorScheme(actualTheme);
 
                 if (typeof window.updateWanderGhostMapTheme === 'function') {
                     window.updateWanderGhostMapTheme(actualTheme);

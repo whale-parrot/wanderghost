@@ -64,6 +64,7 @@ button,
 select,
 textarea {
     font: inherit;
+    appearance: none;
     -webkit-appearance: none;
 }
 
@@ -199,87 +200,3 @@ h6 {
 }
 
 
-/* =========================================
-   Custom Phosphor Map Marker
-   ========================================= */
-.wanderghost-custom-marker {
-    background: transparent !important;
-    
-    /* Size and Alignment */
-    width: 48px !important;
-    height: 48px !important;
-    font-size: 48px !important;
-    display: flex !important;
-    align-items: center;
-    justify-content: center;
-    
-    /* Color: Uses your theme variables! */
-    color: var(--color-accent-lavender); 
-    
-    /* Smooth color transition when toggling themes */
-    transition: color 0.3s ease;
-}
-
-/* Optional: Make it turn green when you hover over the marker/popup */
-.wanderghost-custom-marker:hover {
-    color: var(--color-accent-green);
-}
-
-
-/* =========================================
-   Custom Marker Cluster Colors
-   ========================================= */
-
-/* 1. The outer circle of the cluster */
-.marker-cluster {
-    /* Light earthy green with transparency for the outer ring */
-    box-sizing: border-box !important;
-    background-color: transparent !important; 
-    border: 2px solid var(--color-accent-lavender) !important;
-    
-    /* Force perfect circle geometry */
-    width: 40px !important;
-    height: 40px !important;
-    border-radius: 50% !important;
-
-    display: flex !important;
-    align-items: center !important;
-    justify-content: center !important;
-}
-
-/* 2. The inner circle of the cluster */
-.marker-cluster div {
-    box-sizing: border-box !important;
-    background-color: var(--color-accent-lavender) !important;
-    
-    /* The Magic Centering Math: 
-       Parent is 40px. Child is 30px. 
-       (40 - 30) / 2 = 5px margin on all sides */
-    width: 30px !important;
-    height: 30px !important;
-    margin: 0 !important; /* Clear old margin math */
-    border-radius: 50% !important;
-    
-    /* Center the span text perfectly */
-    display: flex !important;
-    align-items: center !important;
-    justify-content: center !important;
-}
-
-/* 3. The number text inside the cluster */
-.marker-cluster span {
-    color: var(--color-text) !important;
-    font-family: var(--font-sans-serif) !important;
-    font-weight: 700 !important;
-    font-size: 13px !important;
-    
-    /* line-height MUST match the inner div height (30px) for perfect vertical centering */
-    line-height: 30px !important; 
-    display: block !important;
-}
-
-/* Optional: Make clusters pop a bit more on hover */
-.marker-cluster:hover {
-    cursor: pointer;
-    filter: brightness(1.1);
-}

@@ -1,9 +1,9 @@
 {{!< default}}
 
-<main class="gh-main global-map-wrapper">
+<div class="gh-main global-map-wrapper">
     {{!-- The map container --}}
     <div id="global-travel-map" style="width: 100%; height: 100%; z-index: 1;"></div>
-</main>
+</div>
 
 <style>
     /* Target the main viewport wrapper and turn it into a vertical Flex container */
@@ -20,7 +20,7 @@
         left: 4vmin !important;
         right: 4vmin !important;
         width: auto !important;
-        z-index: 1000 !important; /* Ensures it floats ABOVE the map */
+        z-index: 998 !important; /* Ensures it floats ABOVE the map */
         /* We intentionally leave out width/margin/radius overrides 
             so it keeps the beautiful pill shape from header.css */
     }
@@ -50,21 +50,21 @@
         display: none;
     }
 
-    .wanderghost-popup .leaflet-popup-content-wrapper,
+    /*.wanderghost-popup .leaflet-popup-content-wrapper,
     .wanderghost-popup .leaflet-popup-tip {
         background-color: var(--color-surface) !important;
         color: var(--color-text) !important;
         box-shadow: 0 4px 15px rgba(0,0,0,0.1);
-    }
+    }*/
 
     /* 2. Ensure the text inside the popup uses your theme colors */
-    .wanderghost-popup .leaflet-popup-content {
+    /*.wanderghost-popup .leaflet-popup-content {
         color: var(--color-text);
-        margin: 12px 16px; /* Slightly better padding */
-    }
+        margin: 12px 16px;
+    }*/
 
     /* 5. Custom styling for the map popups */
-    .wanderghost-popup img {
+    /*.wanderghost-popup img {
         width: 100%;
         height: 120px;
         object-fit: cover;
@@ -74,18 +74,18 @@
     .wanderghost-popup h3 {
         margin: 0 0 4px 0;
         font-size: 16px;
-    }
+    }*/
 
-    .wanderghost-popup a {
+    /*.wanderghost-popup a {
         font-size: 14px;
         text-decoration: none;
         font-weight: bold;
-        color: var(--color-accent-lavender); /* Makes the link your brand green! */
-    }
+        color: var(--color-accent-lavender);
+    }*/
 
-    .wanderghost-popup a:hover {
-        color: var(--color-accent-ochre); /* Changes to ochre on hover */
-    }
+    /*.wanderghost-popup a:hover {
+        color: var(--color-accent-ochre);
+    }*/
 
     .leaflet-top.leaflet-right {
         /* Push it down below the floating pill header */

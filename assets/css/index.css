@@ -1,11 +1,11 @@
 /*
 
 This is a development CSS file that is compiled to a minified
-production stylesheet in assets/built/screen.css using: npm run dev
+production stylesheet in assets/built/index.css using: pnpm run dev
 
 */
 
-/* Lib - Local component imports
+/* Lib - Local component imports*/
 /* ---------------------------------------------------------- */
 
 /* Base components */
@@ -27,7 +27,7 @@ production stylesheet in assets/built/screen.css using: npm run dev
 
 
 
-/* Main - Your styles here! Edit below
+/* Main - Your styles here! Edit below*/
 /* ---------------------------------------------------------- */
 
 html,
@@ -101,7 +101,7 @@ html,
     height: 2rem;
 }
 
-/* Index
+/* Index*/
 /* ---------------------------------------------------------- */
 
 /* .gh-card:not(:first-child) {
@@ -173,7 +173,7 @@ html,
 }
 
 
-/* Page
+/* Page*/
 /* ---------------------------------------------------------- */
 
 .gh-page-head {
@@ -202,7 +202,7 @@ html,
 }
 
 
-/* Post
+/* Post*/
 /* ---------------------------------------------------------- */
 
 .gh-header {
@@ -239,7 +239,7 @@ html,
 }
 
 
-/* Author Archive
+/* Author Archive*/
 /* ---------------------------------------------------------- */
 
 .gh-author-image {

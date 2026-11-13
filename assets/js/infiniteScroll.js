@@ -45,13 +45,17 @@ export default function infiniteScroll() {
                     
                     if (link) {
                         getNextPage(link).then(({posts, nextLink}) => {
+                            const feed = document.querySelector('.gh-postfeed');
+                            if (!feed) return;
+
                             posts.forEach(post => {
-                                document.querySelector('.gh-postfeed').append(post)
+                                feed.append(post)
                             })
 
                             if (nextLink) {
                                 link = nextLink;
-                                observer.observe(document.querySelector('.post:last-of-type'))
+                                const lastPost = document.querySelector('.post:last-of-type');
+                                if (lastPost) observer.observe(lastPost)
                             } else {
                                 observer.disconnect()
                             }
@@ -66,6 +70,7 @@ export default function infiniteScroll() {
 
     let observer = new IntersectionObserver(callback, options);
 
-    observer.observe(document.querySelector('.post:last-of-type'))
+    const lastPost = document.querySelector('.post:last-of-type');
+    if (lastPost) observer.observe(lastPost)
 
 }

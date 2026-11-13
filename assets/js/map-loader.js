@@ -40,9 +40,13 @@ document.addEventListener('DOMContentLoaded', async () => {
             const isDark = currentTheme === 'dark';
 
             
-            const mapboxToken = window.ghostMapboxToken
+            const mapboxToken = window.ghostMapboxToken;
+            if (!mapboxToken) {
+                console.warn('WanderGhost: window.ghostMapboxToken is not set; map tiles will not load.');
+                return;
+            }
 
-            // 2. Set CARTO URLs (No API Key required!)
+            // 2. Set Mapbox tile URLs
             const lightUrl = `https://api.mapbox.com/styles/v1/mapbox/light-v10/tiles/{z}/{x}/{y}?access_token=${mapboxToken}`;
             const darkUrl = `https://api.mapbox.com/styles/v1/mapbox/dark-v10/tiles/{z}/{x}/{y}?access_token=${mapboxToken}`;
             const currentTileUrl = isDark ? darkUrl : lightUrl;
@@ -57,9 +61,9 @@ document.addEventListener('DOMContentLoaded', async () => {
 
             // 4. Global function for theme toggle
             window.updateWanderGhostPostMapTheme = function(theme) {
-                if (!postTileLayer) return;
+                if (!mapTileLayer) return;
                 const newUrl = theme === 'dark' ? darkUrl : lightUrl;
-                postTileLayer.setUrl(newUrl);
+                mapTileLayer.setUrl(newUrl);
             };
             
             // Add a marker at the exact coordinates
@@ -73,9 +77,22 @@ document.addEventListener('DOMContentLoaded', async () => {
             // that was recently un-hidden, the tiles might look grey or broken. 
             // This forces Leaflet to recalculate the container size.
             setTimeout(() => { map.invalidateSize(); }, 100);
+
+            /* =========================================
+            RESIZE LOGIC: Redraw map when dragged
+            ========================================= */
+            if (typeof ResizeObserver !== 'undefined') {
+                const resizeObserver = new ResizeObserver(() => {
+                    // invalidateSize() tells Leaflet to recalculate its dimensions and redraw tiles.
+                    // rAF avoids "ResizeObserver loop completed with undelivered notifications".
+                    window.requestAnimationFrame(() => map.invalidateSize());
+                });
+                // Start watching the container for size changes
+                resizeObserver.observe(mapContainer);
+            }
         }
-        // 6. Fallback Handling: If postData is null (no coordinates found), 
-        // the container remains 'display: none' and the reader sees nothing.
+    // 6. Fallback Handling: If postData is null (no coordinates found), 
+    // the container remains 'display: none' and the reader sees nothing.
         
     } catch (error) {
         console.error('WanderGhost Map Loader Error:', error);

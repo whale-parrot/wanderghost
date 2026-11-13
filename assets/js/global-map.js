@@ -30,10 +30,13 @@ document.addEventListener('DOMContentLoaded', async () => {
         const isDark = currentTheme === 'dark';
 
         
-        const mapboxToken = window.ghostMapboxToken
+        const mapboxToken = window.ghostMapboxToken;
+        if (!mapboxToken) {
+            console.warn('WanderGhost: window.ghostMapboxToken is not set; map tiles will not load.');
+            return;
+        }
 
-
-        // 2. Set CARTO URLs
+        // 2. Set Mapbox tile URLs
         const lightUrl = `https://api.mapbox.com/styles/v1/mapbox/light-v10/tiles/{z}/{x}/{y}?access_token=${mapboxToken}`;
         const darkUrl = `https://api.mapbox.com/styles/v1/mapbox/dark-v10/tiles/{z}/{x}/{y}?access_token=${mapboxToken}`;
         const currentTileUrl = isDark ? darkUrl : lightUrl;
