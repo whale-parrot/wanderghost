@@ -65,38 +65,41 @@ document.addEventListener('DOMContentLoaded', async () => {
             showCoverageOnHover: false,
         });
 
-        const wanderghostIcon = L.divIcon({
-            className: 'wanderghost-custom-marker',
-            html: `<i class="ph-fill ph-map-pin"></i>`,
-            iconAnchor: [24, 48], // The "tip" of the marker
-            popupAnchor: [0, -48] // Where the popup opens
-        });
+        const wanderghostIcon = window.wanderGhostCreateMarkerIcon
+            ? window.wanderGhostCreateMarkerIcon()
+            : undefined;
+        const escapeHtml = window.wanderGhostEscapeHtml || (value => String(value == null ? '' : value));
 
         // 4. Loop through all locations and create markers (Tasks 5.4 & 5.5)
         locations.forEach(loc => {
-            // Create a standard Leaflet marker
-            const marker = L.marker([loc.location.lat, loc.location.lng], { icon: wanderghostIcon });
-            
+            if (!loc.location) return;
+
+            // Create a Leaflet marker with the shared WanderGhost icon
+            const marker = L.marker(
+                [loc.location.lat, loc.location.lng],
+                wanderghostIcon ? { icon: wanderghostIcon } : undefined
+            );
+
             // Build the custom popup HTML (Task 5.5)
             let popupContent = `<div class="wanderghost-popup">`;
-            
+
             // Add featured image if it exists
             if (loc.featureImage) {
-                popupContent += `<img src="${loc.featureImage}" alt="${loc.postTitle}">`;
+                popupContent += `<img src="${escapeHtml(loc.featureImage)}" alt="${escapeHtml(loc.postTitle)}">`;
             }
-            
+
             // Add title and link
             popupContent += `
-                <h3>${loc.postTitle}</h3>
-                <p style="margin:0 0 8px 0; color:#666; font-size:13px;">${loc.location.label}</p>
-                <a href="${loc.postUrl}">Read the story →</a>
+                <h3>${escapeHtml(loc.postTitle)}</h3>
+                <p>${escapeHtml(loc.location.label)}</p>
+                <a href="${escapeHtml(loc.postUrl)}">Read the story →</a>
             </div>`;
-            
+
             // Bind the popup to the marker
-            marker.bindPopup(`<div class="wanderghost-popup">${popupContent}</div>`, {
+            marker.bindPopup(popupContent, {
                 className: 'wanderghost-popup'
             });
-            
+
             // Add the marker to the cluster group
             markers.addLayer(marker);
         });

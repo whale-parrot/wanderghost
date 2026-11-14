@@ -43,7 +43,7 @@
 /* ========================================= */
 :root {
     /* Colours */
-    --color-primary: var(--ghost-accent-color, #4E633D);
+    --color-primary: var(--color-accent-green);
     --color-base: #353B32;
     --color-bg: #E8E0D4;
     --color-success: #80b912;
@@ -67,37 +67,24 @@
     --font-bold: 700;
     --font-heavy: 800;
 
-    /* Breakpoints */
-    --xlarge: 1680px;
-    --large: 1280px;
-    --medium: 980px;
-    --small: 740px;
-    --xsmall: 480px;
-
     /* Sizes */
     --height: 4rem;
-    --margin: 2rem;
     --radius: 1rem;
 
     /* WanderGhost custom map variables */
     --map-height-single: 350px;
-    --map-height-global: 100vh;
     --map-border-radius: 8px;
     --map-border-color: #D8D4CA;
-    --map-marker-size: 32px;
 
-    /* Force Ghost Comments UI Colors (Light Mode) */
+    /* Ghost accent color */
     --ghost-accent-color: var(--color-accent-green);
-    /*--background-color: var(--color-bg);*/
-    /*--text-color: var(--color-text);*/
-    /*--border-color: var(--color-border);*/
 }
 
 /* ========================================= */
 /* Dark mode - Purple Palette                */
 /* ========================================= */
 html[data-theme="dark"] {
-    --color-primary: #C4BBD8;
+    --color-primary: var(--color-accent-lavender);
     --color-base: #F3F0E8;
     --color-border: #4D4450;
     --color-bg: #252028;
@@ -111,9 +98,5 @@ html[data-theme="dark"] {
     --map-border-color: #4D4450;
     color-scheme: dark;
 
-    /* Force Ghost Comments UI Colors (Dark Mode) */
     --ghost-accent-color: var(--color-accent-green);
-    /*--background-color: var(--color-bg);*/
-    /*--text-color: var(--color-text);*/
-    /*--border-color: var(--color-border);*/
 }

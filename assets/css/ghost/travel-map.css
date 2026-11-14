@@ -1,0 +1,58 @@
+/* ========================================= */
+/* Global Travel Map Page                    */
+/* ========================================= */
+
+body.page-travel-map .gh-viewport {
+    display: flex !important;
+    flex-direction: column !important;
+    height: 100vh !important;
+    overflow: hidden !important;
+}
+
+body.page-travel-map .gh-head {
+    position: fixed !important;
+    top: 12px !important;
+    left: 4vmin !important;
+    right: 4vmin !important;
+    width: auto !important;
+    z-index: 998 !important;
+}
+
+body.page-travel-map .gh-main.global-map-wrapper {
+    flex: 1;
+    height: 100%;
+    padding: 0;
+    margin: 0;
+    max-width: 100%;
+    position: relative;
+}
+
+#global-travel-map {
+    width: 100%;
+    height: 100%;
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 1;
+}
+
+body.page-travel-map .gh-foot {
+    display: none;
+}
+
+.leaflet-top.leaflet-right {
+    top: 12vmin !important;
+    right: 4vmin !important;
+}
+
+@media (max-width: 900px) {
+    .leaflet-top.leaflet-right {
+        top: 84px !important;
+        right: 12px !important;
+    }
+
+    .leaflet-top.leaflet-left {
+        top: 84px !important;
+        left: 12px !important;
+    }
+}

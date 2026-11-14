@@ -1,11 +1,14 @@
 // Wait for the HTML document to be fully loaded before running
 document.addEventListener('DOMContentLoaded', async () => {
-    
+
     // 1. Find the map container on the page
     const mapContainer = document.getElementById('auto-post-map');
-    
-    // If the container doesn't exist, we aren't on a post page (maybe the homepage). Exit quietly.
-    if (!mapContainer) return; 
+
+    // If the container doesn't exist, we aren't on a post page. Exit quietly.
+    if (!mapContainer) return;
+
+    const mapWrap = mapContainer.closest('.gh-post-map-wrap');
+    const resizeHandle = mapWrap ? mapWrap.querySelector('.gh-map-resize-handle') : null;
 
     // 2. Get the current post's ID from the data attribute we added in post.hbs
     const postId = mapContainer.getAttribute('data-post-id');
@@ -16,85 +19,146 @@ document.addEventListener('DOMContentLoaded', async () => {
         // Ghost automatically serves files in the assets folder at the /assets/ URL path
         const response = await fetch('/assets/locations.json');
         if (!response.ok) throw new Error('Failed to load locations data');
-        
+
         const locations = await response.json();
-        
+
         // 4. Find the entry that matches this specific post's ID
         const postData = locations.find(loc => loc.postId === postId);
-        
+
         // 5. If we found coordinates, show the map and initialize Leaflet
-        if (postData && postData.location) {
-            
-            // Un-hide the container so the reader can see it
-            mapContainer.style.display = 'block';
-            
-            // Initialize the Leaflet map, centered on the post's coordinates
-            // 13 is the default zoom level (city/street level)
-            const map = L.map('auto-post-map').setView(
-                [postData.location.lat, postData.location.lng], 
-                13 
-            );
-            
-            // 1. Detect current theme
-            const currentTheme = document.documentElement.getAttribute('data-theme');
-            const isDark = currentTheme === 'dark';
+        if (!postData || !postData.location) return;
 
-            
-            const mapboxToken = window.ghostMapboxToken;
-            if (!mapboxToken) {
-                console.warn('WanderGhost: window.ghostMapboxToken is not set; map tiles will not load.');
-                return;
-            }
-
-            // 2. Set Mapbox tile URLs
-            const lightUrl = `https://api.mapbox.com/styles/v1/mapbox/light-v10/tiles/{z}/{x}/{y}?access_token=${mapboxToken}`;
-            const darkUrl = `https://api.mapbox.com/styles/v1/mapbox/dark-v10/tiles/{z}/{x}/{y}?access_token=${mapboxToken}`;
-            const currentTileUrl = isDark ? darkUrl : lightUrl;
-
-            // 3. Add tiles and store in variable
-            let mapTileLayer = L.tileLayer(currentTileUrl, {
-                attribution: '&copy; <a href="https://www.mapbox.com/">Mapbox</a> &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
-                maxZoom: 19,
-                tileSize: 512,
-                zoomOffset: -1
-            }).addTo(map);
-
-            // 4. Global function for theme toggle
-            window.updateWanderGhostPostMapTheme = function(theme) {
-                if (!mapTileLayer) return;
-                const newUrl = theme === 'dark' ? darkUrl : lightUrl;
-                mapTileLayer.setUrl(newUrl);
-            };
-            
-            // Add a marker at the exact coordinates
-            L.marker([postData.location.lat, postData.location.lng])
-                .addTo(map)
-                // Bind a popup that shows when the user clicks the marker
-                .bindPopup(`<b>${postData.postTitle}</b><br>${postData.location.label}`)
-                .openPopup(); // Open it by default so the reader sees it immediately
-                
-            // Fix for a known Leaflet quirk: if a map is initialized in a container 
-            // that was recently un-hidden, the tiles might look grey or broken. 
-            // This forces Leaflet to recalculate the container size.
-            setTimeout(() => { map.invalidateSize(); }, 100);
-
-            /* =========================================
-            RESIZE LOGIC: Redraw map when dragged
-            ========================================= */
-            if (typeof ResizeObserver !== 'undefined') {
-                const resizeObserver = new ResizeObserver(() => {
-                    // invalidateSize() tells Leaflet to recalculate its dimensions and redraw tiles.
-                    // rAF avoids "ResizeObserver loop completed with undelivered notifications".
-                    window.requestAnimationFrame(() => map.invalidateSize());
-                });
-                // Start watching the container for size changes
-                resizeObserver.observe(mapContainer);
-            }
+        const mapboxToken = window.ghostMapboxToken;
+        if (!mapboxToken) {
+            console.warn('WanderGhost: window.ghostMapboxToken is not set; map tiles will not load.');
+            return;
         }
-    // 6. Fallback Handling: If postData is null (no coordinates found), 
-    // the container remains 'display: none' and the reader sees nothing.
-        
+
+        // Show the wrapper and container before Leaflet measures them.
+        if (mapWrap) mapWrap.style.display = 'block';
+        mapContainer.style.display = 'block';
+
+        // Initialize the Leaflet map, centered on the post's coordinates.
+        // 13 is the default zoom level (city/street level).
+        const map = L.map('auto-post-map').setView(
+            [postData.location.lat, postData.location.lng],
+            13
+        );
+
+        // 1. Detect current theme
+        const currentTheme = document.documentElement.getAttribute('data-theme');
+        const isDark = currentTheme === 'dark';
+
+        // 2. Set Mapbox tile URLs
+        const lightUrl = `https://api.mapbox.com/styles/v1/mapbox/light-v10/tiles/{z}/{x}/{y}?access_token=${mapboxToken}`;
+        const darkUrl = `https://api.mapbox.com/styles/v1/mapbox/dark-v10/tiles/{z}/{x}/{y}?access_token=${mapboxToken}`;
+        const currentTileUrl = isDark ? darkUrl : lightUrl;
+
+        // 3. Add tiles and store in variable
+        const mapTileLayer = L.tileLayer(currentTileUrl, {
+            attribution: '&copy; <a href="https://www.mapbox.com/">Mapbox</a> &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
+            maxZoom: 19,
+            tileSize: 512,
+            zoomOffset: -1
+        }).addTo(map);
+
+        // 4. Global function for theme toggle
+        window.updateWanderGhostPostMapTheme = function (theme) {
+            if (!mapTileLayer) return;
+            const newUrl = theme === 'dark' ? darkUrl : lightUrl;
+            mapTileLayer.setUrl(newUrl);
+        };
+
+        // 5. Add a marker at the exact coordinates, using the same icon as the
+        // global travel map. `wanderGhostCreateMarkerIcon` is defined in map-common.js.
+        const markerIcon = window.wanderGhostCreateMarkerIcon
+            ? window.wanderGhostCreateMarkerIcon()
+            : undefined;
+        const escapeHtml = window.wanderGhostEscapeHtml || (value => String(value == null ? '' : value));
+
+        L.marker(
+            [postData.location.lat, postData.location.lng],
+            markerIcon ? { icon: markerIcon } : undefined
+        )
+            .addTo(map)
+            .bindPopup(
+                `<div class="wanderghost-popup">
+                    <h3>${escapeHtml(postData.postTitle)}</h3>
+                    <p>${escapeHtml(postData.location.label)}</p>
+                </div>`,
+                { className: 'wanderghost-popup' }
+            )
+            .openPopup(); // Open it by default so the reader sees it immediately
+
+        // Fix for a known Leaflet quirk: if a map is initialized in a container
+        // that was recently un-hidden, the tiles might look grey or broken.
+        setTimeout(() => { map.invalidateSize(); }, 100);
+
+        // Redraw the map whenever the wrapper's size changes.
+        if (typeof ResizeObserver !== 'undefined') {
+            const resizeObserver = new ResizeObserver(() => {
+                // rAF avoids "ResizeObserver loop completed with undelivered notifications".
+                window.requestAnimationFrame(() => map.invalidateSize());
+            });
+            resizeObserver.observe(mapWrap || mapContainer);
+        }
+
+        // 6. Custom resize handle. The handle is a sibling of the map, so
+        // Leaflet's drag handler cannot intercept the gesture.
+        if (mapWrap && resizeHandle) {
+            setupMapResize(map, mapWrap, resizeHandle);
+        }
     } catch (error) {
         console.error('WanderGhost Map Loader Error:', error);
     }
 });
+
+function setupMapResize(map, wrap, handle) {
+    let start = null;
+    const minHeight = 250;
+
+    const getMinWidth = () => Math.min(300, wrap.parentElement.clientWidth);
+
+    handle.addEventListener('pointerdown', (event) => {
+        event.preventDefault();
+        start = {
+            x: event.clientX,
+            y: event.clientY,
+            width: wrap.offsetWidth,
+            height: wrap.offsetHeight
+        };
+        handle.setPointerCapture(event.pointerId);
+        wrap.classList.add('is-resizing');
+    });
+
+    handle.addEventListener('pointermove', (event) => {
+        if (!start) return;
+
+        const maxWidth = wrap.parentElement.clientWidth;
+        const width = Math.max(
+            getMinWidth(),
+            Math.min(start.width + event.clientX - start.x, maxWidth)
+        );
+        const height = Math.max(minHeight, start.height + event.clientY - start.y);
+
+        wrap.style.width = `${width}px`;
+        wrap.style.height = `${height}px`;
+
+        window.requestAnimationFrame(() => map.invalidateSize());
+    });
+
+    const endResize = (event) => {
+        if (!start) return;
+        start = null;
+        wrap.classList.remove('is-resizing');
+        try {
+            handle.releasePointerCapture(event.pointerId);
+        } catch (error) {
+            // Pointer capture may already be released.
+        }
+        map.invalidateSize();
+    };
+
+    handle.addEventListener('pointerup', endResize);
+    handle.addEventListener('pointercancel', endResize);
+}

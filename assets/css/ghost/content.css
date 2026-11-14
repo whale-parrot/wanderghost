@@ -254,22 +254,13 @@ figcaption strong {
     border-bottom: 1px solid var(--color-border);
 }
 
-/* ========================================= */
-/* Comments                                  */
-/* ========================================= */
-/*.gh-post-comments {                                   */
-/*    margin-top: 8vmin;                                */
-/*    padding-top: 4vmin;                               */
-/*    border-top: 1px solid var(--color-border);        */
-/*}
-
-/* Force the Ghost comments iframe to be transparent */
-/*.gh-post-comments iframe {                            */
-/*    background: transparent !important;               */
-/*    width: 100% !important;                           */
-/*    border: none !important;                          */
-/*}
-
+/* Hide raw map links in post content; the interactive map is rendered instead. */
+.gh-content a[href*="openstreetmap.org"],
+.gh-content a[href*="maps.apple.com"],
+.gh-content a[href*="maps.google.com"],
+.gh-content a[href*="osmand.net"] {
+    display: none !important;
+}
 
 /* ========================================= */
 /* Map Controls (Zoom Buttons) Global Fix    */
@@ -341,6 +332,12 @@ figcaption strong {
     font-size: 16px;
 }
 
+.wanderghost-popup p {
+    margin: 0 0 8px 0;
+    font-size: 13px;
+    opacity: 0.7;
+}
+
 .wanderghost-popup a {
     font-size: 14px;
     text-decoration: none;
@@ -353,28 +350,73 @@ figcaption strong {
 }
 
 /* ========================================= */
-/* Resizable Post Map Container              */   
+/* Resizable Post Map                        */
 /* ========================================= */
-.gh-post-map-container, 
-#auto-post-map {
-    resize: both;          /* Enables the drag handle */
-    overflow: hidden;      /* Required for resize to work */
-    min-height: 250px;     /* Minimum size so it doesn't disappear */
-    min-width: 300px;
-    max-width: 100%;       /* Prevents it from breaking the page layout */
-    border: 1px solid var(--color-border);
+.gh-post-map-wrap {
+    position: relative;
+    width: 100%;
+    height: var(--map-height-single);
+    min-height: 250px;
+    max-width: 100%;
+    margin-bottom: 2rem;
+    overflow: hidden;
+    border: 1px solid var(--map-border-color);
     border-radius: var(--map-border-radius);
-    
-    /* REMOVED: cursor: se-resize; */
-    /* Leaflet will now handle the cursor normally (grab/grabbing for panning) */
+    box-sizing: border-box;
 }
 
-/* Style the drag handle to match your theme */
-.gh-post-map-container::-webkit-resizer,
-#auto-post-map::-webkit-resizer {
-    background-color: var(--color-accent-green);
+#auto-post-map {
+    display: none;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    border: 0;
+    border-radius: 0;
+}
+
+.gh-map-resize-handle {
+    position: absolute;
+    right: 8px;
+    bottom: 8px;
+    z-index: 900; /* Above Leaflet panes and controls (controls are 800) */
+    width: 26px;
+    height: 26px;
+    padding: 0;
+    border: 1px solid var(--color-border);
     border-radius: 4px;
-    /* The browser automatically applies the correct resize cursor just to this corner */
+    background: var(--color-surface);
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.2);
+    opacity: 0.9;
+    cursor: nwse-resize;
+    touch-action: none;
+}
+
+.gh-map-resize-handle:hover {
+    opacity: 1;
+    border-color: var(--color-accent-green);
+}
+
+.gh-map-resize-handle::before {
+    content: "";
+    position: absolute;
+    right: 6px;
+    bottom: 6px;
+    width: 9px;
+    height: 9px;
+    border-right: 2px solid var(--color-text);
+    border-bottom: 2px solid var(--color-text);
+    opacity: 0.5;
+}
+
+.gh-post-map-wrap.is-resizing,
+.gh-post-map-wrap.is-resizing * {
+    user-select: none;
+}
+
+@media (max-width: 700px) {
+    .gh-map-resize-handle {
+        display: none;
+    }
 }
 
 
