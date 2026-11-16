@@ -364,7 +364,7 @@ body:not(.gh-head-open) .gh-burger:hover .gh-burger-inner::after {
     .gh-head-open .gh-head-menu .nav a {
         font-size: 2.2rem;
         font-weight: 400;
-        font-family: var(--font-sans, sans-serif);
+        font-family: var(--font-serif, serif);
         display: block;
         padding: 12px 0;
         color: var(--color-text);
@@ -459,7 +459,7 @@ body:not(.gh-head-open) .gh-burger:hover .gh-burger-inner::after {
         background: rgba(0, 0, 0, 0.25);
         backdrop-filter: blur(8px);
         -webkit-backdrop-filter: blur(8px);
-        z-index: 999; 
+        z-index: 987; 
         pointer-events: none;
     }
 

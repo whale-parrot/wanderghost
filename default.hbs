@@ -26,6 +26,10 @@
 
     <title>{{meta_title}}</title>
 
+    {{#is "post"}}
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/photoswipe@5.4.4/dist/photoswipe.css">
+    {{/is}}
+
     {{ghost_head}}
     
     <!-- Leaflet Core CSS (Official SRI hash from leafletjs.com) -->
@@ -247,6 +251,118 @@
         });
     });
 </script>
+
+{{#is "post"}}
+<script type="module">
+  (async function() {
+    // 1. Only proceed if PhotoSwipe modules load successfully.
+    let PhotoSwipeLightbox, PhotoSwipeModule;
+    try {
+      const lightboxMod = await import('https://cdn.jsdelivr.net/npm/photoswipe@5.4.4/dist/photoswipe-lightbox.esm.min.js');
+      const pswpMod = await import('https://cdn.jsdelivr.net/npm/photoswipe@5.4.4/dist/photoswipe.esm.min.js');
+      PhotoSwipeLightbox = lightboxMod.default;
+      PhotoSwipeModule = pswpMod.default;
+    } catch (e) {
+      console.warn('[PhotoSwipe] Failed to load modules from CDN.', e);
+      return;
+    }
+
+    // 2a. Collect body images (inside the post content).
+    const bodyImages = Array.from(document.querySelectorAll('.kg-image, .gh-content img'));
+
+    // 2b. Find the feature image. Try common class names in order of likelihood.
+    const featureSelectors = [
+    '.gh-feature-image img',     // ← your guess; keep first if it worked
+    '.gh-post-media img',
+    '.gh-article-image img',
+    '.post-full-image img',
+    '.gh-post-image',
+    'figure.gh-article-image img',
+    ];
+
+    let featureImg = null;
+    for (const sel of featureSelectors) {
+    const el = document.querySelector(sel);
+    if (el && el.tagName === 'IMG') {
+        featureImg = el;
+        break;
+    }
+    }
+
+    // 2c. Build the ordered list: feature image first, then body images.
+    //     Deduplicate by src in case the feature image also appears in the body.
+    const images = [];
+    const seenSrc = new Set();
+
+    if (featureImg) {
+    const src = featureImg.currentSrc || featureImg.src;
+    if (src) {
+        images.push(featureImg);
+        seenSrc.add(src);
+    }
+    }
+
+    for (const img of bodyImages) {
+    const src = img.currentSrc || img.src;
+    if (src && !seenSrc.has(src)) {
+        seenSrc.add(src);
+        images.push(img);
+    }
+    }
+
+    if (images.length === 0) return;
+
+    // 3. Build the dataSource array required by PhotoSwipe.
+    const dataSource = images.map((img, index) => {
+      // PhotoSwipe needs width/height to calculate the layout.
+      // Prefer the HTML attributes; fall back to the image's natural size.
+      let width = parseInt(img.getAttribute('width'), 10);
+      let height = parseInt(img.getAttribute('height'), 10);
+
+      if (!width || !height) {
+        // If the image hasn't loaded yet, naturalWidth will be 0.
+        // In that case, we use a reasonable default to avoid breaking the gallery.
+        // PhotoSwipe will still display the image, but its initial sizing may be less precise.
+        width = img.naturalWidth || 1200;
+        height = img.naturalHeight || 800;
+      }
+
+      return {
+        id: index,
+        src: img.currentSrc || img.src, // Use currentSrc for responsive images
+        width: width,
+        height: height,
+        alt: img.alt || '',
+        // The 'msrc' is the low-resolution placeholder shown while the full image loads.
+        msrc: img.currentSrc || img.src
+      };
+    });
+
+    // 4. Initialize PhotoSwipe.
+    const lightbox = new PhotoSwipeLightbox({
+      dataSource: dataSource,
+      pswpModule: PhotoSwipeModule,
+      // Optional: tweak the UI.
+      bgOpacity: 0.92,
+      showHideAnimationType: 'fade',
+      // This ensures only our collected images are used.
+      gallery: null, // We manage the dataSource ourselves.
+    });
+
+    // 5. Attach a click listener to each image to open the gallery at the correct index.
+    images.forEach((img, index) => {
+      img.style.cursor = 'zoom-in'; // Visual cue
+      img.addEventListener('click', (e) => {
+        e.preventDefault();
+        lightbox.loadAndOpen(index);
+      });
+    });
+
+    // 6. Initialize the lightbox.
+    lightbox.init();
+  })();
+</script>
+{{/is}}
 
 
 </body>
